@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Firebase Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css">
+</head>
+<body>
+    <h1> Hola Firebase! </h1>
+    
+    <div id="firebase-app">
+        <input type="text" v-model="message" v-on:change="store_in_firebase">
+        <div>
+            El valor de Firebase es: {{ display_message }}
+        </div>
+    </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.28/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAGiaxeUijV1xe-cPRlEnbjRd0iyJR06YA",
+    authDomain: "fir-test-874c0.firebaseapp.com",
+    databaseURL: "https://fir-test-874c0.firebaseio.com",
+    storageBucket: "fir-test-874c0.appspot.com",
+    messagingSenderId: "630819072975"
+  };
+  firebase.initializeApp(config);
+  // v.message
+  // v.$data.message
+  v= new Vue({
+    el: "#firebase-app",
+    data: {
+        message: "Hola Firebase",
+        display_message: "Valor inicial"
+    },
+    methods: {
+        store_in_firebase: function(){
+            db = firebase.database();
+            db.ref("message").set(this.message);
+            //db.ref("message").push(this.message);
+        }
+    },
+    ready: function(){
+        db = firebase.database();
+        messages = db.ref("message");
+        var v = this;
+        messages.on('value', function(snapshot){
+            v.display_message = snapshot.val();
+        });
+    }
+  });
+
+
+
+
+</script>
+
+</body>
+</html>
